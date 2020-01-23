@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from imports.posts import posts
 
 app = Flask(__name__)
