@@ -20,3 +20,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=10)])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+    def validate_email(self, email):
+        email = User.query.filter_by(username=email.data).first()
+        if email:
+            raise ValidationError('That email address is already associated with an account.')
