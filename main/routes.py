@@ -4,6 +4,8 @@ from main.imports.posts import posts
 from main import app, db, bcrypt
 from main.models.models import User
 from flask_login import login_user, logout_user, current_user, login_required
+import secrets
+import os
 
 
 @app.route("/")
@@ -54,13 +56,26 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
+def save_picture(form_picture):
+    random_hex_value = secrets.token_hex(8)
+    _, file_ext = os.path.splitext(form_picture.filename)
+    profile_picture_filename = random_hex_value + file_ext
+    profile_pic_path = os.path.join(app.root_path, 'static/profile_pictures', profile_picture_filename)
+    form_picture.save(profile_pic_path)
+    return profile_picture_filename
+
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
+        if form.profile_picture.data:
+            picture_file = save_picture(form.profile_picture.data)
+            current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
+        # current_user.image_file = form.profile_picture
         db.session.commit()
         flash('Account information has been updated!', 'success')
         return redirect(url_for('account'))
