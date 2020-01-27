@@ -1,8 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from main.imports.posts import posts
+# from main.imports.posts import posts
 from main import app, db, bcrypt
-from main.models.models import User
+from main.models.models import User, Post
 from flask_login import login_user, logout_user, current_user, login_required
 from PIL import Image
 import secrets
@@ -12,6 +12,7 @@ import os
 @app.route("/")
 @app.route("/home")
 def home():
+    posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
 @app.route("/about")
@@ -97,6 +98,9 @@ def account():
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
         flash("Your new post has been created!", 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post', form=form)
