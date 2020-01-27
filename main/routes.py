@@ -4,6 +4,7 @@ from main.imports.posts import posts
 from main import app, db, bcrypt
 from main.models.models import User
 from flask_login import login_user, logout_user, current_user, login_required
+from PIL import Image
 import secrets
 import os
 
@@ -62,7 +63,11 @@ def save_picture(form_picture):
     _, file_ext = os.path.splitext(form_picture.filename)
     profile_picture_filename = random_hex_value + file_ext
     profile_pic_path = os.path.join(app.root_path, 'static/profile_pictures', profile_picture_filename)
-    form_picture.save(profile_pic_path)
+
+    picture_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(picture_size)
+    i.save(profile_pic_path)
     return profile_picture_filename
 
 @app.route("/account", methods=['GET', 'POST'])
