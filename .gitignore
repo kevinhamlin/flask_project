@@ -3,4 +3,4 @@
 main/static/profile_pictures/*
 !main/static/profile_pictures/default.jpg
 
-main/site.db
+*.db
