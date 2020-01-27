@@ -1,6 +1,5 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from main.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-# from main.imports.posts import posts
 from main import app, db, bcrypt
 from main.models.models import User, Post
 from flask_login import login_user, logout_user, current_user, login_required
@@ -103,10 +102,22 @@ def create_post():
         db.session.commit()
         flash("Your new post has been created!", 'success')
         return redirect(url_for('home'))
-    return render_template('create_post.html', title='New Post', form=form)
+    return render_template('create_post.html', title='New Post', form=form, legend='New Post')
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
+
+
+@app.route("/post/<int:post_id>/update")
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    form.title.data = post.title
+    form.content.data = post.content
+    return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
 
