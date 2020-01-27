@@ -62,3 +62,9 @@ class RequestResetForm(FlaskForm):
         user = User.query.filter_by(username=email.data).first()
         if user is None:
             raise ValidationError('There is no account associated with that email.')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
