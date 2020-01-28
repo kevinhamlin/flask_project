@@ -1,7 +1,8 @@
 from datetime import datetime
-from main import db, login_manager, app
+from main import db, login_manager
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -15,14 +16,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
-
     def get_reset_token(self, expires_seconds=1800):
-        serial = Serializer(app.config['SECRET_KEY'], expires_seconds)
+        serial = Serializer(current_app.config['SECRET_KEY'], expires_seconds)
         return serial.dumps({'user_id': self.id}).decode('utf-8')
 
     @staticmethod
     def verify_reset_token(token):
-        serial = Serializer(app.config['SECRET_KEY'])
+        serial = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = serial.loads(token)['user_id']
         except:
@@ -31,7 +31,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-
 
 
 class Post(db.Model):
