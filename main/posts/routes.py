@@ -1,4 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, url_for, render_template, request, flash, abort, redirect
+from flask_login import login_required, current_user
+from main import db
+from main.models.models import Post
+from main.posts.forms import PostForm
 
 posts = Blueprint('posts', __name__)
 
@@ -14,6 +18,7 @@ def create_post():
         flash("Your new post has been created!", 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post', form=form, legend='New Post')
+
 
 @posts.route("/post/<int:post_id>")
 def post(post_id):
