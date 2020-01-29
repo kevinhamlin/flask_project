@@ -4,3 +4,4 @@ main/static/profile_pictures/*
 !main/static/profile_pictures/default.jpg
 
 *.db
+main/trash.py
