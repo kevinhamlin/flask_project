@@ -11,8 +11,16 @@ h1, h2, h3, h4, h5, h6 {
 .bg-steel {
   background-color: #007acc;
   /*5f788a*/
+  /* Secondary #ccad00
+  /* Tertiary  #cc003d
+  Purple #8f00cc
+  Monochromatic blue secondary #247ab3
+  */
 }
-
+.sidebar-link {
+  background-color: #247ab3
+ /* color: #ffffff */
+}
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
 }
