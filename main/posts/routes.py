@@ -1,8 +1,8 @@
 from flask import Blueprint, url_for, render_template, request, flash, abort, redirect
 from flask_login import login_required, current_user
 from main import db
-from main.models.models import Post
-from main.posts.forms import PostForm
+from main.models.models import Post, Comment
+from main.posts.forms import PostForm, CommentForm
 
 posts = Blueprint('posts', __name__)
 
@@ -45,6 +45,20 @@ def update_post(post_id):
     return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
 
 
+@posts.route("/post/<int:post_id>/comment", methods=['POST', 'GET'])
+@login_required
+def comment_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(post_id=post.id, content=form.comment_content.data, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Your comment has been added.")
+        return redirect(url_for('primary.home'))
+    return render_template('comment_post.html', title='Comment Post', form=form, legend='New Comment', post=post)
+
+
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
@@ -55,3 +69,5 @@ def delete_post(post_id):
     db.session.commit()
     flash('Your post has been successfully deleted!', 'success')
     return redirect(url_for('primary.home'))
+
+
