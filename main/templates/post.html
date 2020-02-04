@@ -22,9 +22,9 @@
         <ul class="list-unstyled">
         {% for comment in comments %}
             <li class="media">
-            <img class="rounded-circle article-img" src="{{url_for('static', filename='profile_pictures/' + post.author.image_file) }}">
+            <img class="rounded-circle article-img" src="{{url_for('static', filename='profile_pictures/' + comment.author.image_file) }}">
             <div class="media-body">
-            <h6 class="mt-0 mb-1">User ID:{{ comment.user_id}} </h6> <h6>Date Posted:{{comment.date_posted.strftime('%m-%d-%Y')}}</h6>
+            <h6 class="mt-0 mb-1">User: {{ comment.author.username}} </h6> <h6>Date Posted:{{comment.date_posted.strftime('%m-%d-%Y')}}</h6>
                 {{ comment.content }}
             </div>
           </li>
