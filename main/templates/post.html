@@ -18,6 +18,19 @@
             <small><a href="{{ url_for('posts.comment_post', post_id=post.id) }}">Comment</a></small>
         </div>
     </article>
+    {% if comments %}
+        <ul class="list-unstyled">
+        {% for comment in comments %}
+            <li class="media">
+            <img class="rounded-circle article-img" src="{{url_for('static', filename='profile_pictures/' + post.author.image_file) }}">
+            <div class="media-body">
+            <h6 class="mt-0 mb-1">User ID:{{ comment.user_id}} </h6> <h6>Date Posted:{{comment.date_posted.strftime('%m-%d-%Y')}}</h6>
+                {{ comment.content }}
+            </div>
+          </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
