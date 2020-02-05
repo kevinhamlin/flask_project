@@ -18,10 +18,11 @@
             <small><a href="{{ url_for('posts.comment_post', post_id=post.id) }}">Comment</a></small>
         </div>
     </article>
+
     <article class="media content-section-secondary">
         <div class="media-body">
-        {% if current_user.is_authenticated %}
-        {% if comments %}
+            {% if current_user.is_authenticated %}
+                {% if comments %}
             <div class="article-title">Comments({{ comments | count }}):</div>
                 <ul class="list-unstyled">
                 {% for comment in comments %}
