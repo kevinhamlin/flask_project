@@ -22,7 +22,7 @@
         <div class="media-body">
         {% if current_user.is_authenticated %}
         {% if comments %}
-
+            <div class="article-title">Comments({{ comments | count }}):</div>
                 <ul class="list-unstyled">
                 {% for comment in comments %}
                     <div class="mt-2 mb-3">
