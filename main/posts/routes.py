@@ -12,7 +12,11 @@ posts = Blueprint('posts', __name__)
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        if form.private.data:
+            private = 1
+        else:
+            private = 0
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, private=private)
         db.session.add(post)
         db.session.commit()
         flash("Your new post has been created!", 'success')
