@@ -30,6 +30,8 @@
                     {% else %}
                         {{ form.content(class="form-control form-control-lg") }}
                     {% endif %}
+                    {{ form.private(class="form-check-input, ml-1") }}
+                    {{ form.private.label(class="form-check-label") }}
                 </div>
             </fieldset>
             <div class="form-group">
