@@ -19,33 +19,40 @@
         </div>
     </article>
 
-    <article class="media content-section-secondary">
-        <div class="media-body">
-            {% if current_user.is_authenticated %}
-                {% if comments %}
-            <div class="article-title">Comments({{ comments | count }}):</div>
-                <ul class="list-unstyled">
-                {% for comment in comments %}
-                    <div class="mt-2 mb-3">
-                        <li class="media">
-                        <img class="rounded-circle article-img-sm" src="{{url_for('static', filename='profile_pictures/' + comment.author.image_file) }}">
-                        <div class="media-body">
-                            <small class="text-muted">{{ comment.author.username }}: {{ comment.date_posted.strftime('%m-%d-%Y') }} </small>
+    {% if current_user.is_authenticated %}
+        {% if comments %}
+            <article class="media content-section-secondary">
+                <div class="media-body">
+                    <div class="article-title">Comments({{ comments | count }}):</div>
+                    <ul class="list-unstyled">
+                        {% for comment in comments %}
+                        <div class="mt-2 mb-3">
+                            <li class="media">
+                            <img class="rounded-circle article-img-sm" src="{{url_for('static', filename='profile_pictures/' + comment.author.image_file) }}">
                             <div class="media-body">
-                                {{ comment.content }}
+                                <small class="text-muted">{{ comment.author.username }}: {{ comment.date_posted.strftime('%m-%d-%Y') }} </small>
+                                <div class="media-body">
+                                    {{ comment.content }}
+                                </div>
                             </div>
+                            </li>
                         </div>
-                        </li>
-                    </div>
-                {% endfor %}
-                </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </article>
+        {% else %}
 
         {% endif %}
-        {% else %}
-            <h4>Please login to view comments.</h4>
-        {% endif %}
-        </div>
-    </article>
+
+    {% else %}
+        <article class="media content-section-secondary">
+            <div class="media-body">
+                <h2>Please login to view comments.</h2>
+            </div>
+        </article>
+    {% endif %}
+
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
