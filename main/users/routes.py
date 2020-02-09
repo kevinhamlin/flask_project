@@ -4,6 +4,7 @@ from main import db, bcrypt
 from main.models.models import User, Post
 from main.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
 from main.users.utilities import save_picture, send_reset_email
+from sqlalchemy import or_, and_
 
 users = Blueprint('users', __name__)
 
@@ -73,9 +74,17 @@ def account():
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    if current_user.is_authenticated:
+        posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    else:
+        posts = Post.query.filter(and_(Post.private == 0, Post.author == user)).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('user_posts.html', posts=posts, user=user)
 
+
+    # if current_user.is_authenticated:
+    #     posts = Post.query.filter(or_(Post.private == 0, and_(Post.private == 1, current_user == Post.author))).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    # else:
+    #     posts = Post.query.filter(Post.private == 0).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
