@@ -7,9 +7,8 @@ from main import mail
 
 
 def save_profile_picture(form_picture):
-    random_hex_value = secrets.token_hex(8)
-    _, file_ext = os.path.splitext(form_picture.filename)
-    profile_picture_filename = random_hex_value + file_ext
+    filename = form_picture.filename
+    profile_picture_filename = picture_filename(filename)
     profile_pic_path = os.path.join(current_app.root_path, 'static/profile_pictures', profile_picture_filename)
 
     picture_size = (125, 125)
@@ -17,6 +16,12 @@ def save_profile_picture(form_picture):
     img.thumbnail(picture_size)
     img.save(profile_pic_path)
     return profile_picture_filename
+
+
+def picture_filename(filename):
+    random_hex_value = secrets.token_hex(8)
+    _, file_ext = os.path.splitext(filename)
+    return random_hex_value + file_ext
 
 
 def send_reset_email(user):
