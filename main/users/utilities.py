@@ -6,16 +6,16 @@ from flask import url_for, current_app
 from main import mail
 
 
-def save_picture(form_picture):
+def save_profile_picture(form_picture):
     random_hex_value = secrets.token_hex(8)
     _, file_ext = os.path.splitext(form_picture.filename)
     profile_picture_filename = random_hex_value + file_ext
     profile_pic_path = os.path.join(current_app.root_path, 'static/profile_pictures', profile_picture_filename)
 
     picture_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(picture_size)
-    i.save(profile_pic_path)
+    img = Image.open(form_picture)
+    img.thumbnail(picture_size)
+    img.save(profile_pic_path)
     return profile_picture_filename
 
 
